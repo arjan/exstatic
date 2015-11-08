@@ -13,6 +13,8 @@ defmodule Exstatic.Mixfile do
   end
 
   defp deps do
-    []
+    [
+     {:plug, "~> 1.0"}
+    ]
   end
 end

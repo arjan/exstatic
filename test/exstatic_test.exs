@@ -30,6 +30,8 @@ defmodule ExStaticTest do
     :ok = ExStatic.Compiler.compile_to_disk(basedir, "test2.html")
 
     assert "<h3>hello</h3>\n" = ExStatic.contents("test2.html")
+
+    ## FIXME assert "text/html" = ExStatic.content_type("test2.html")
   end
 
   test "proper errors" do 

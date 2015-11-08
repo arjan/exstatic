@@ -29,5 +29,8 @@ defmodule ExStatic do
   # Return the size of the gzipped file
   file_accessor :gzip_size
 
+  # Return the content type
+  file_accessor :content_type
+  
 end
 

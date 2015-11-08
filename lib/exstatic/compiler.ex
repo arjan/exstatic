@@ -35,8 +35,9 @@ defmodule ExStatic.Compiler do
   def compile(basedir, filepath) do
     contents = Path.join(basedir, filepath) |> File.read!
     modname = modulename(filepath) |> String.to_atom
+    mime = filepath |> Path.basename |> Plug.MIME.path
 
-    f = forms(modname, contents)
+    f = forms(modname, contents, mime)
     :compile.forms(f)
   end
   
@@ -52,14 +53,15 @@ defmodule ExStatic.Compiler do
     :lists.reverse(res)
   end
 
-  defp forms(modname, contents) do
+  defp forms(modname, contents, mime) do
     size = byte_size(contents)
     gzip_contents = :zlib.gzip(contents)
     gzip_size = byte_size(gzip_contents)
 
     [{:attribute, 1, :module, modname},
-     {:attribute, 3, :export, [contents: 0, size: 0, gzip_contents: 0, gzip_size: 0]},
+     {:attribute, 3, :export, [contents: 0, size: 0, gzip_contents: 0, gzip_size: 0, content_type: 0]},
      {:function, 5, :size, 0, [{:clause, 5, [], [], [{:integer, 6, size}]}]},
+     {:function, 5, :content_type, 0, [{:clause, 5, [], [], [{:integer, 6, size}]}]},
      {:function, 5, :gzip_size, 0, [{:clause, 5, [], [], [{:integer, 6, gzip_size}]}]},
      {:function, 8, :contents, 0,
       [{:clause, 8, [], [],
