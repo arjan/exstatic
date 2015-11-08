@@ -26,12 +26,15 @@ defmodule ExStaticTest do
     
   end
 
-  test "write compiled beam file" do
+  test "write compiled beam file and accessor methods" do
     :ok = ExStatic.Compiler.compile_to_disk(basedir, "test2.html")
 
     assert "<h3>hello</h3>\n" = ExStatic.contents("test2.html")
 
-    ## FIXME assert "text/html" = ExStatic.content_type("test2.html")
+    assert "text/html" = ExStatic.content_type("test2.html")
+    assert ExStatic.ctime("test2.html") > 0
+    assert ExStatic.mtime("test2.html") > 0
+
   end
 
   test "proper errors" do 

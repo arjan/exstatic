@@ -31,6 +31,12 @@ defmodule ExStatic do
 
   # Return the content type
   file_accessor :content_type
+
+  # Return the ctime
+  file_accessor :ctime
+
+  # Return the ctime
+  file_accessor :mtime
   
 end
 
