@@ -59,6 +59,7 @@ defmodule ExStatic.Compiler do
     :lists.reverse(res)
   end
 
+  # This is where the magic happens.
   defp forms(modname, contents, mime, file_info) do
     size = byte_size(contents)
     gzip_contents = :zlib.gzip(contents)
@@ -79,9 +80,11 @@ defmodule ExStatic.Compiler do
      {:function, 5, :exists?, 0, [{:clause, 5, [], [], [{:atom, 6, :true}]}]},
      {:function, 5, :ctime, 0, [{:clause, 5, [], [], [{:integer, 6, ctime}]}]},
      {:function, 5, :mtime, 0, [{:clause, 5, [], [], [{:integer, 6, mtime}]}]},
-     {:function, 5, :content_type, 0, [{:clause, 5, [], [],
-                                        [{:bin, 2,
-                                          [{:bin_element, 2, {:string, 2, :erlang.binary_to_list(mime)}, :default, :default}]}]}]},
+     {:function, 5, :content_type, 0,
+      [{:clause, 5, [], [],
+        [{:bin, 2,
+          [{:bin_element, 2, {:string, 2, :erlang.binary_to_list(mime)}, :default, :default}]
+         }]}]},
      {:function, 5, :gzip_size, 0, [{:clause, 5, [], [], [{:integer, 6, gzip_size}]}]},
      {:function, 8, :contents, 0,
       [{:clause, 8, [], [],
