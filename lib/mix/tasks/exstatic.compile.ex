@@ -10,7 +10,7 @@ defmodule Mix.Tasks.Exstatic.Compile do
   """
   def run(args) do
     input_path  = List.first(args) || @default_input_path
-    :ok = ExStatic.compile_all(input_path)
+    :ok = ExStatic.Compiler.compile_all(input_path)
   end
 
 end
