@@ -6,7 +6,7 @@ defmodule ExStatic.Macro do
           mod = String.to_existing_atom(ExStatic.Compiler.modulename(filepath))
           apply(mod, unquote(name), [])
         rescue
-          ArgumentError -> {:error, :nofile}
+          ArgumentError -> {:error, :nofile, filepath}
         end
       end
     end
@@ -16,6 +16,9 @@ end
 defmodule ExStatic do
 
   import ExStatic.Macro
+
+  # Do we exist? (always returns true)
+  file_accessor :exists?
 
   # Return the contents of the file as a binary string.
   file_accessor :contents

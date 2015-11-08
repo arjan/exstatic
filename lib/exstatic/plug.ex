@@ -94,7 +94,7 @@ defmodule ExStatic.Plug do
         conn
       true ->
         filepath = segments |> Path.join
-        serve_static(conn, filepath, gzip, qs_cache, et_cache)
+        serve_static(conn, ExStatic.exists?(filepath), filepath, gzip, qs_cache, et_cache)
     end
   end
 
@@ -105,15 +105,16 @@ defmodule ExStatic.Plug do
   defp allowed?(_only, []),   do: false
   defp allowed?(nil, _list),  do: true
   defp allowed?(only, [h|_]), do: h in only
-
-  defp serve_static(conn, filepath, gzip, qs_cache, et_cache) do
+  
+  defp serve_static(conn, true, filepath, gzip, qs_cache, et_cache) do
     case put_cache_header(conn, qs_cache, et_cache, file_info) do
       {:stale, conn} ->
         content_type = ExStatic.content_type(filepath)
+        size = Integer.to_string(ExStatic.size(filepath))
 
         conn
         |> put_resp_header("content-type", content_type)
-        |> put_resp_header("content-length", Integer.to_string(ExStatic.size(filepath)))
+        |> put_resp_header("content-length", size)
         |> put_resp_header("x-static", "true")
         |> serve_content(filepath, gzip && gzip?(conn))
         |> halt
@@ -124,6 +125,10 @@ defmodule ExStatic.Plug do
     end
   end
 
+  defp serve_static(conn, {:error, :nofile, _}, _filepath, _gzip, _qs_cache, _et_cache) do
+    conn
+  end
+  
   defp serve_content(conn, filepath, false) do
     conn
     |> resp(200, ExStatic.contents(filepath))

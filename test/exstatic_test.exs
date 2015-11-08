@@ -29,6 +29,8 @@ defmodule ExStaticTest do
   test "write compiled beam file and accessor methods" do
     :ok = ExStatic.Compiler.compile_to_disk(basedir, "test2.html")
 
+    assert true = ExStatic.exists?("test2.html")
+
     assert "<h3>hello</h3>\n" = ExStatic.contents("test2.html")
 
     assert "text/html" = ExStatic.content_type("test2.html")
@@ -38,8 +40,8 @@ defmodule ExStaticTest do
   end
 
   test "proper errors" do 
-    assert {:error, :nofile} = ExStatic.contents("alkdsfjlkdsjflds.html")
-    assert {:error, :nofile} = ExStatic.size("alkdsfjlkdsjflds.html")
+    assert {:error, :nofile, _} = ExStatic.contents("alkdsfjlkdsjflds.html")
+    assert {:error, :nofile, _} = ExStatic.size("alkdsfjlkdsjflds.html")
   end
 
   test "mix exstatic.compile" do
