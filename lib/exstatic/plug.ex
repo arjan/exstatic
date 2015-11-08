@@ -110,11 +110,9 @@ defmodule ExStatic.Plug do
     case put_cache_header(conn, qs_cache, et_cache, file_info) do
       {:stale, conn} ->
         content_type = ExStatic.content_type(filepath)
-        size = Integer.to_string(ExStatic.size(filepath))
 
         conn
         |> put_resp_header("content-type", content_type)
-        |> put_resp_header("content-length", size)
         |> put_resp_header("x-static", "true")
         |> serve_content(filepath, gzip && gzip?(conn))
         |> halt
@@ -131,12 +129,14 @@ defmodule ExStatic.Plug do
   
   defp serve_content(conn, filepath, false) do
     conn
+    |> put_resp_header("content-length", Integer.to_string(ExStatic.size(filepath)))
     |> resp(200, ExStatic.contents(filepath))
   end
 
   defp serve_content(conn, filepath, true) do
     conn
     |> put_resp_header("content-encoding", "gzip")
+    |> put_resp_header("content-length", Integer.to_string(ExStatic.gzip_size(filepath)))
     |> resp(200, ExStatic.gzip_contents(filepath))
   end
 
