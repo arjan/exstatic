@@ -36,7 +36,7 @@ defmodule Exstatic.Mixfile do
   
   defp package do
     [
-        files: ["lib", "priv", "mix.exs", "README*", "readme*", "LICENSE*", "license*"],
+        files: ["lib", "mix.exs", "README*", "LICENSE*"],
         maintainers: ["Arjan Scherpenisse"],
         licenses: ["MIT"],
         links: %{"GitHub" => "https://github.com/arjan/exstatic"}
