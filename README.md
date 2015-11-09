@@ -36,8 +36,8 @@ exstatic.compile` again.
 Performance
 -----------
 
-Initial tests show that the performance is ~2x that of the regular
-`Plug.Static`.
+Initial tests show that the performance is about a 70% increase
+compared to the vanilla `Plug.Static`.
 
 
 
@@ -52,4 +52,22 @@ The module names are checksums of the original filenames (relative to
 the static base path, e.g. `priv/static`):
 `ExStatic.Compiled.66AGY7SLJZNP4MCP256LHNA6UWRMTGUY.beam`.
 
-Each module exposes several functions: `contents/0`, `size/0`, `mime/0` etc.
+Each module compiles several functions, exposing the file contents and its metadata.
+These functions are also accessible from the `ExStatic` module:
+
+    ExStatic.exists?("robots.txt")
+    ExStatic.contents("robots.txt")
+    ExStatic.gzip_contents("robots.txt")
+    ExStatic.size("robots.txt")
+    ExStatic.gzip_size("robots.txt")
+    ExStatic.content_type("robots.txt")
+    ExStatic.ctime("robots.txt")
+    ExStatic.mtime("robots.txt")
+
+All of these functions also exist in assertion-mode:
+
+    ExStatic.mtime!("robots.txt")
+
+
+Whenever a file is not found, the function crashes (the `!` variant);
+or `{:error, :nofile, filename}` is returned (the normal variant)
