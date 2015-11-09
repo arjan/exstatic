@@ -1,11 +1,16 @@
 defmodule Exstatic.Mixfile do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [app: :exstatic,
-     version: "0.1.0",
+     version: @version,
      elixir: "~> 1.0",
-     deps: deps]
+     deps: deps,
+     package: package,
+     description: description,
+     name: "ExStatic"]
   end
 
   def application do
