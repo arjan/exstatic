@@ -17,7 +17,7 @@ Usage
 
 Add `exstatic` to your deps:
 
-     {:exstatic, git: "https://github.com/arjan/exstatic.git"},
+     {:exstatic, "~> 0.1"},
 
 Then, compile your static files (by default it looks in `priv/static`):
 
