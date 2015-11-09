@@ -23,6 +23,16 @@ defmodule ExStatic.Compiler do
     |> Path.wildcard
     |> Enum.filter(&(!File.dir?(&1)))
     |> Enum.map(&(Path.relative_to(&1, input_path)))
+    |> Enum.filter(&(!already_compiled(input_path, &1)))
+  end
+
+  def already_compiled(basedir, filepath) do
+    if ExStatic.exists?(filepath) do
+      file_info(mtime: mtime) = get_file_info!(basedir |> Path.join filepath)
+      ExStatic.mtime!(filepath) == mtime
+    else
+      false
+    end
   end
 
   def compile_to_disk(basedir, filepath) do
@@ -42,12 +52,16 @@ defmodule ExStatic.Compiler do
     contents = path |> File.read!
     modname = modulename(filepath) |> String.to_atom
     mime = filepath |> Path.basename |> Plug.MIME.path
-    {:ok, file_info} = :prim_file.read_file_info(path)
 
-    f = forms(modname, contents, mime, file_info)
+    f = forms(modname, contents, mime, get_file_info!(path))
     :compile.forms(f)
   end
-  
+
+  defp get_file_info!(path) do
+    {:ok, file_info} = :prim_file.read_file_info(path)
+    file_info
+  end
+
   def modulename(filepath) do
     checksum = {filepath} |> :erlang.phash2() |> Integer.to_string(16)
     "ExStatic.Compiled." <> checksum
