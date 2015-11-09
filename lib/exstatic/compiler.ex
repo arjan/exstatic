@@ -22,7 +22,6 @@ defmodule ExStatic.Compiler do
     |> Path.wildcard
     |> Enum.filter(&(!File.dir?(&1)))
     |> Enum.map(&(Path.relative_to(&1, input_path)))
-    #    |> Enum.map(&(map_file(&1, input_path)))
   end
 
   
@@ -48,7 +47,8 @@ defmodule ExStatic.Compiler do
   end
   
   def modulename(filepath) do
-    "ExStatic.Compiled." <> (:crypto.hash(:sha, filepath) |> Base.encode32)
+    checksum = {filepath} |> :erlang.phash2() |> Integer.to_string(16)
+    "ExStatic.Compiled." <> checksum
   end
 
   defp scan({:done,{:ok,t,n},s},res) do
