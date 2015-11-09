@@ -11,9 +11,11 @@ defmodule Mix.Tasks.Exstatic.Compile do
   def run(args) do
     input_path  = List.first(args) || @default_input_path
     case ExStatic.Compiler.compile_all(input_path) do
-      :ok -> :ok
+      {:ok, count} ->
+        Mix.shell.info "Compiled #{count} static files in #{input_path} to bytecode"
+        :ok
       {:error, :invalid_path} ->
-        Kernel.raise Mix.Error, mix: true, message: "Invalid static path: #{input_path}"
+        Mix.raise "Invalid static path: #{input_path}"
     end
   end
 

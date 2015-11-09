@@ -7,10 +7,11 @@ defmodule ExStatic.Compiler do
   def compile_all(input_path) do
     if File.exists?(input_path) do
 
-      input_path
+      count = input_path
       |> filter_files
       |> Enum.map(fn(f) -> :ok = compile_to_disk(input_path, f) end)
-      :ok
+      |> Enum.count
+      {:ok, count}
     else
       {:error, :invalid_path}
     end
@@ -24,7 +25,6 @@ defmodule ExStatic.Compiler do
     |> Enum.map(&(Path.relative_to(&1, input_path)))
   end
 
-  
   def compile_to_disk(basedir, filepath) do
     {:ok, _m, c} = compile(basedir, filepath)
     beamfile = modulename(filepath) <> ".beam"
