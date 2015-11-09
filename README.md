@@ -55,7 +55,6 @@ the static base path, e.g. `priv/static`):
 Each module compiles several functions, exposing the file contents and its metadata.
 These functions are also accessible from the `ExStatic` module:
 
-    ExStatic.exists?("robots.txt")
     ExStatic.contents("robots.txt")
     ExStatic.gzip_contents("robots.txt")
     ExStatic.size("robots.txt")
@@ -68,6 +67,9 @@ All of these functions also exist in assertion-mode:
 
     ExStatic.mtime!("robots.txt")
 
-
 Whenever a file is not found, the function crashes (the `!` variant);
-or `{:error, :nofile, filename}` is returned (the normal variant)
+or `{:error, :nofile, filename}` is returned (the normal variant).
+
+Furthermore, there is a `ExStatic.exists?` function returning a
+boolean to check whether a given file exists.
+
