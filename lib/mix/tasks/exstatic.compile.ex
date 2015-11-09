@@ -13,7 +13,7 @@ defmodule Mix.Tasks.Exstatic.Compile do
     case ExStatic.Compiler.compile_all(input_path) do
       :ok -> :ok
       {:error, :invalid_path} ->
-        Kernel.raise Mix.Error, mix: true, message: "Invalid / non-existing static path"
+        Kernel.raise Mix.Error, mix: true, message: "Invalid static path: #{input_path}"
     end
   end
 
