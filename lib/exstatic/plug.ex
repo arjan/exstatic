@@ -38,21 +38,6 @@ defmodule ExStatic.Plug do
       starting with "?vsn=" in the query string. Defaults to
       "public, max-age=31536000"
 
-  ## Examples
-
-  This plug can be mounted in a `Plug.Builder` pipeline as follow:
-
-      defmodule MyPlug do
-        use Plug.Builder
-
-        plug ExStatic.Plug, at: "/public"
-        plug :not_found
-
-        def not_found(conn, _) do
-          Plug.Conn.send_resp(conn, 404, "not found")
-        end
-      end
-
   """
 
   @behaviour Plug
@@ -60,10 +45,6 @@ defmodule ExStatic.Plug do
 
   import Plug.Conn
   alias Plug.Conn
-
-  defmodule InvalidPathError do
-    defexception message: "invalid path for static asset", plug_status: 400
-  end
 
   def init(opts) do
     at    = Keyword.fetch!(opts, :at)

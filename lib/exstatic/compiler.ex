@@ -31,7 +31,9 @@ defmodule ExStatic.Compiler do
     :ok = File.write!(hd(Mix.Project.load_paths) |> Path.join(beamfile), c)
 
     # also make it available in current runtime
-    {:module, _} = :code.load_file(modulename(filepath) |> String.to_atom)
+    mod = modulename(filepath) |> String.to_atom
+    :code.purge(mod)
+    {:module, _} = :code.load_file(mod)
     :ok
   end    
   
