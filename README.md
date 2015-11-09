@@ -3,11 +3,14 @@ ExStatic
 
 Serve static files from memory in the Phoenix Framework.
 
-This extension compiles all your static files into Erlang modules and
-loads them into the Erlang VM. The assumption is that there are not
-that many static files and they are not that big. There are no size
-checks done -- take care that your VM settings allow the kind of
-memory usage.
+This extension compiles all of a project's static assets
+(e.g. Javascript, HTML, images, etc) into Erlang modules and loads
+them into the Erlang VM, with the purpose of serving them fast and
+without a dependency on a filesystem.
+
+The assumption is that there are not that many static files and they
+are not that big. There are no size checks done -- take care that your
+VM settings allow the kind of memory usage.
 
 Usage
 -----
