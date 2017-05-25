@@ -7,9 +7,9 @@ defmodule Exstatic.Mixfile do
     [app: :exstatic,
      version: @version,
      elixir: "~> 1.0",
-     deps: deps,
-     package: package,
-     description: description,
+     deps: deps(),
+     package: package(),
+     description: description(),
      name: "ExStatic"]
   end
 
@@ -19,7 +19,8 @@ defmodule Exstatic.Mixfile do
 
   defp deps do
     [
-        {:plug, "~> 1.0"}
+      {:plug, "~> 1.3"},
+      {:mime, "~> 1.1"}
     ]
   end
 
@@ -33,7 +34,7 @@ defmodule Exstatic.Mixfile do
     without a dependency on a filesystem.
     """
   end
-  
+
   defp package do
     [
         files: ["lib", "mix.exs", "README*", "LICENSE*"],
@@ -42,5 +43,5 @@ defmodule Exstatic.Mixfile do
         links: %{"GitHub" => "https://github.com/arjan/exstatic"}
     ]
   end
-  
+
 end

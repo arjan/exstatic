@@ -2,9 +2,9 @@ defmodule ExStatic.Test.Plug do
   use ExUnit.Case
   use Plug.Test
 
-  setup do
-    Mix.Tasks.Exstatic.Compile.run(["test/fixtures/priv"])
-  end    
+  defmodule MyStatic do
+    use ExStatic, path: "../fixtures/priv"
+  end
 
   test "Pass through non-existing files" do
     conn = conn(:get, "/doesnotexist")
@@ -23,7 +23,7 @@ defmodule ExStatic.Test.Plug do
 
   test "Serve valid file" do
     conn = conn(:get, "/a.html")
-    conn = serve(conn, [at: "/"])
+    conn = serve(conn)
     assert 200 = conn.status
     assert "text/html" = conn |> header("content-type")
     assert "2" = conn |> header("content-length")
@@ -32,7 +32,7 @@ defmodule ExStatic.Test.Plug do
 
   test "Serve valid file w/ HEAD request" do
     conn = conn(:head, "/a.html")
-    conn = serve(conn, [at: "/"])
+    conn = serve(conn)
     assert 200 = conn.status
   end
 
@@ -69,8 +69,9 @@ defmodule ExStatic.Test.Plug do
     conn = serve(conn, [at: "/"])
     assert 304 = conn.status
   end
-  
-  defp serve(conn, opts) do
+
+  defp serve(conn, opts \\ []) do
+    opts = Keyword.put(opts, :module, MyStatic)
     ExStatic.Plug.call(conn, ExStatic.Plug.init(opts))
   end
 
